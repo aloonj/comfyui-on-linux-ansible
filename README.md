@@ -2,9 +2,9 @@
 
 [![Ansible](https://img.shields.io/badge/Ansible-2.10+-blue.svg)](https://www.ansible.com/)
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
-[![Ubuntu 25.10](https://img.shields.io/badge/Ubuntu%2025.10-Tested-E95420?logo=ubuntu&logoColor=white)](https://ubuntu.com/)
+[![Ubuntu 25.10](https://img.shields.io/badge/Ubuntu%2025.10-Tested-brightgreen?logo=ubuntu&logoColor=white)](https://ubuntu.com/)
 [![Debian/RedHat](https://img.shields.io/badge/Debian%2FRedHat-Untested-orange)](https://github.com/aloonj/comfyui-on-linux-ansible)
-[![NVIDIA CUDA](https://img.shields.io/badge/NVIDIA%20CUDA-Tested-76B900?logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-zone)
+[![NVIDIA CUDA](https://img.shields.io/badge/NVIDIA%20CUDA-Tested-brightgreen?logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-zone)
 [![AMD ROCm/CPU](https://img.shields.io/badge/AMD%20ROCm%2FCPU-Untested-orange)](https://github.com/aloonj/comfyui-on-linux-ansible)
 
 OS-agnostic Ansible playbook for installing ComfyUI on Linux. Supports Debian/Ubuntu and RedHat/CentOS/Fedora with automatic GPU detection (NVIDIA/AMD) and systemd service.
