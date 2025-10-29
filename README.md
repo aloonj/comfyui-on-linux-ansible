@@ -1,5 +1,11 @@
 # ComfyUI Ansible Installation for Linux
 
+[![Ansible](https://img.shields.io/badge/Ansible-2.10+-blue.svg)](https://www.ansible.com/)
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
+[![Ubuntu 25.10](https://img.shields.io/badge/Ubuntu-25.10-E95420?logo=ubuntu&logoColor=white)](https://ubuntu.com/)
+[![Debian](https://img.shields.io/badge/Debian-11+-A81D33?logo=debian&logoColor=white)](https://www.debian.org/)
+[![RedHat](https://img.shields.io/badge/RedHat-8+-EE0000?logo=redhat&logoColor=white)](https://www.redhat.com/)
+
 OS-agnostic Ansible playbook for installing ComfyUI on Linux. Supports Debian/Ubuntu and RedHat/CentOS/Fedora with automatic GPU detection (NVIDIA/AMD) and systemd service.
 
 ## Features
@@ -97,7 +103,7 @@ sudo groupdel comfyui
 
 ## License
 
-MIT
+Unlicense
 
 ## Credits
 
