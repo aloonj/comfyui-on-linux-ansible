@@ -2,7 +2,7 @@
 
 [![Ansible](https://img.shields.io/badge/Ansible-2.10+-blue.svg)](https://www.ansible.com/)
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
-[![Tested on Ubuntu 25.10](https://img.shields.io/badge/Tested%20on-Ubuntu%2025.10-E95420?logo=ubuntu&logoColor=white)](https://ubuntu.com/)
+[![Ubuntu 25.10](https://img.shields.io/badge/Ubuntu%2025.10-Tested-E95420?logo=ubuntu&logoColor=white)](https://ubuntu.com/)
 [![Debian/RedHat](https://img.shields.io/badge/Debian%2FRedHat-Untested-orange)](https://github.com/aloonj/comfyui-on-linux-ansible)
 [![NVIDIA CUDA](https://img.shields.io/badge/NVIDIA%20CUDA-Tested-76B900?logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-zone)
 [![AMD ROCm/CPU](https://img.shields.io/badge/AMD%20ROCm%2FCPU-Untested-orange)](https://github.com/aloonj/comfyui-on-linux-ansible)
