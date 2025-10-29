@@ -1,0 +1,22 @@
+---
+# Debian/Ubuntu specific variables
+
+python_packages:
+  - python3
+  - python3-pip
+  - python3-venv
+  - python3-dev
+
+git_package: git
+
+build_packages:
+  - build-essential
+  - wget
+  - curl
+
+# For adding deadsnakes PPA if needed for newer Python
+python_ppa_repo: ppa:deadsnakes/ppa
+python_ppa_required: false  # Will be set dynamically if Python version unavailable
+
+# Package manager command
+package_manager: apt

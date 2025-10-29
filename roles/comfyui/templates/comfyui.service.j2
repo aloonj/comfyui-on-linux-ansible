@@ -1,0 +1,19 @@
+[Unit]
+Description=ComfyUI - AI Image Generation Service
+After=network.target
+
+[Service]
+Type=simple
+User={{ comfyui_user }}
+Group={{ comfyui_group }}
+WorkingDirectory={{ comfyui_app_dir }}
+ExecStart={{ comfyui_install_dir }}/launch_comfyui.sh
+Restart=always
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=comfyui
+
+[Install]
+WantedBy=multi-user.target

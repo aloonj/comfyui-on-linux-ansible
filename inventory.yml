@@ -1,0 +1,59 @@
+---
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
+      ansible_python_interpreter: /usr/bin/python3
+  vars:
+    # ComfyUI Installation Variables
+    # Override these via command line with -e "var=value"
+
+    # Installation method: 'cli' (recommended) or 'source'
+    comfyui_install_method: cli
+
+    # Installation directory (in user home to avoid permission issues)
+    comfyui_install_dir: /home/comfyui/comfyui
+
+    # Virtual environment directory (matches guide: comfy-env)
+    comfyui_venv_dir: /home/comfyui/comfy-env
+
+    # ComfyUI user and group
+    comfyui_create_user: true
+    comfyui_user: comfyui
+    comfyui_group: comfyui
+    comfyui_user_home: /home/comfyui
+    comfyui_user_shell: /bin/bash
+
+    # Python configuration
+    comfyui_python_version: "3"
+    comfyui_python_min_version: "3.9"
+
+    # GPU configuration: 'auto', 'nvidia', 'amd', 'cpu'
+    comfyui_gpu_type: auto
+
+    # PyTorch versions
+    pytorch_cuda_version: cu124
+    pytorch_rocm_version: rocm6.0
+
+    # Network configuration
+    comfyui_bind_address: 127.0.0.1
+    comfyui_port: 8188
+
+    # Service configuration
+    comfyui_enable_service: true
+    comfyui_service_name: comfyui
+
+    # Launch options
+    comfyui_launch_args:
+      - "--listen {{ comfyui_bind_address }}"
+      - "--port {{ comfyui_port }}"
+
+    # Additional launch arguments (e.g., --cpu, --lowvram)
+    comfyui_extra_launch_args: []
+
+    # ComfyUI Manager
+    comfyui_install_manager: true
+
+    # Source installation specific (when comfyui_install_method: source)
+    comfyui_git_repo: https://github.com/comfyanonymous/ComfyUI.git
+    comfyui_git_version: master

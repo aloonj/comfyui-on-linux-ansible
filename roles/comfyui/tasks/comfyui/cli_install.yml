@@ -1,0 +1,86 @@
+---
+# ComfyUI installation via comfy-cli (following official guide)
+# Guide: Create ONE venv, install comfy-cli in it, then run comfy install from within it
+
+- name: Set venv path
+  set_fact:
+    comfyui_venv_dir: "{{ comfyui_user_home }}/comfy-env"
+
+- name: Create virtual environment for ComfyUI
+  command: python3 -m venv {{ comfyui_venv_dir }}
+  args:
+    creates: "{{ comfyui_venv_dir }}/bin/activate"
+  become: true
+  become_user: "{{ comfyui_user }}"
+
+- name: Upgrade pip in virtual environment
+  pip:
+    name:
+      - pip
+      - setuptools
+      - wheel
+    state: latest
+    virtualenv: "{{ comfyui_venv_dir }}"
+  become: true
+  become_user: "{{ comfyui_user }}"
+
+- name: Install comfy-cli into the virtual environment
+  pip:
+    name: comfy-cli
+    state: present
+    virtualenv: "{{ comfyui_venv_dir }}"
+  become: true
+  become_user: "{{ comfyui_user }}"
+
+- name: Check if ComfyUI is already installed
+  stat:
+    path: "{{ comfyui_install_dir }}/.git"
+  register: comfyui_git_dir
+
+- name: Set comfy-cli GPU flag
+  set_fact:
+    comfy_gpu_flag: "{{ '--nvidia' if detected_gpu_type == 'cuda' else ('--amd' if detected_gpu_type == 'rocm' else '--cpu') }}"
+
+- name: Install ComfyUI using comfy-cli (from within venv)
+  shell: |
+    source {{ comfyui_venv_dir }}/bin/activate
+    comfy --skip-prompt --workspace={{ comfyui_install_dir }} install {{ comfy_gpu_flag }} {{ '--skip-manager' if not comfyui_install_manager else '' }}
+  args:
+    executable: /bin/bash
+  become: true
+  become_user: "{{ comfyui_user }}"
+  when: not comfyui_git_dir.stat.exists
+
+- name: Set PyTorch index URL based on GPU type
+  set_fact:
+    pytorch_index_url: "{{ 'https://download.pytorch.org/whl/cu124' if detected_gpu_type == 'cuda' else ('https://download.pytorch.org/whl/rocm6.0' if detected_gpu_type == 'rocm' else 'https://download.pytorch.org/whl/cpu') }}"
+
+- name: Install PyTorch with GPU support (Step 4 from guide)
+  pip:
+    name:
+      - torch
+      - torchvision
+      - torchaudio
+    extra_args: "--index-url {{ pytorch_index_url }}"
+    virtualenv: "{{ comfyui_venv_dir }}"
+  become: true
+  become_user: "{{ comfyui_user }}"
+
+- name: Install ComfyUI Python dependencies from requirements.txt
+  pip:
+    requirements: "{{ comfyui_install_dir }}/requirements.txt"
+    virtualenv: "{{ comfyui_venv_dir }}"
+  become: true
+  become_user: "{{ comfyui_user }}"
+
+- name: Set ComfyUI directory path
+  set_fact:
+    comfyui_app_dir: "{{ comfyui_install_dir }}"
+
+- name: Ensure ComfyUI directory has correct permissions
+  file:
+    path: "{{ comfyui_app_dir }}"
+    state: directory
+    owner: "{{ comfyui_user }}"
+    group: "{{ comfyui_group }}"
+    recurse: true

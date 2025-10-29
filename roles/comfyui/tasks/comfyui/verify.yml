@@ -1,0 +1,48 @@
+---
+# Verify ComfyUI installation
+
+- name: Check if main.py exists
+  stat:
+    path: "{{ comfyui_app_dir }}/main.py"
+  register: main_py
+
+- name: Verify ComfyUI main file exists
+  assert:
+    that:
+      - main_py.stat.exists
+    fail_msg: "ComfyUI main.py not found at {{ comfyui_app_dir }}/main.py"
+    success_msg: "ComfyUI installation verified"
+
+- name: Test ComfyUI can be imported
+  shell: |
+    source {{ comfyui_venv_dir }}/bin/activate
+    cd {{ comfyui_app_dir }}
+    python -c "import sys; sys.path.insert(0, '.'); print('ComfyUI import test successful')"
+  args:
+    executable: /bin/bash
+  register: import_test
+  changed_when: false
+  become: true
+  become_user: "{{ comfyui_user }}"
+
+- name: Display verification result
+  debug:
+    msg: "{{ import_test.stdout_lines }}"
+
+- name: Create models directories if they don't exist
+  file:
+    path: "{{ comfyui_app_dir }}/models/{{ item }}"
+    state: directory
+    owner: "{{ comfyui_user }}"
+    group: "{{ comfyui_group }}"
+    mode: '0755'
+  loop:
+    - checkpoints
+    - clip
+    - clip_vision
+    - configs
+    - controlnet
+    - embeddings
+    - loras
+    - upscale_models
+    - vae

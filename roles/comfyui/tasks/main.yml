@@ -1,0 +1,56 @@
+---
+# Main task orchestrator for ComfyUI installation
+
+- name: Detect and validate operating system
+  include_tasks: detect_os.yml
+  tags: ['always']
+
+- name: Load OS-specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags: ['always']
+
+- name: Create ComfyUI user and group
+  include_tasks: user_management.yml
+  when: comfyui_create_user | bool
+  tags: ['user']
+
+- name: Install system prerequisites
+  include_tasks: "prerequisites/{{ ansible_os_family }}.yml"
+  tags: ['prerequisites']
+
+- name: Install and configure Python
+  include_tasks: "python/{{ ansible_os_family }}.yml"
+  tags: ['python']
+
+- name: Validate Python installation
+  include_tasks: python/validate.yml
+  tags: ['python', 'validate']
+
+- name: Detect GPU hardware
+  include_tasks: gpu_detection/main.yml
+  when: comfyui_gpu_type == "auto"
+  tags: ['gpu']
+
+- name: Set GPU type if not auto-detected
+  set_fact:
+    detected_gpu_type: "{{ comfyui_gpu_type }}"
+  when: comfyui_gpu_type != "auto"
+  tags: ['gpu']
+
+- name: Install ComfyUI (creates venv and installs ComfyUI)
+  include_tasks: "comfyui/{{ comfyui_install_method }}_install.yml"
+  tags: ['comfyui']
+
+- name: Install PyTorch with appropriate GPU support (source method only)
+  include_tasks: "pytorch/{{ detected_gpu_type }}.yml"
+  when: comfyui_install_method == "source"
+  tags: ['pytorch']
+
+- name: Verify ComfyUI installation
+  include_tasks: comfyui/verify.yml
+  tags: ['comfyui', 'verify']
+
+- name: Configure ComfyUI service
+  include_tasks: service/main.yml
+  when: comfyui_enable_service | bool
+  tags: ['service']

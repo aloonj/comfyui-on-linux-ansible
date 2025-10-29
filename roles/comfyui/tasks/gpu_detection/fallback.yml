@@ -1,0 +1,12 @@
+---
+# CPU fallback when no GPU detected
+
+- name: Set CPU mode
+  set_fact:
+    detected_gpu_type: "cpu"
+
+- name: Display CPU mode message
+  debug:
+    msg:
+      - "No GPU detected, will install CPU-only PyTorch"
+      - "Performance will be significantly slower without GPU acceleration"

@@ -1,0 +1,29 @@
+---
+# GPU detection orchestrator
+
+- name: Initialize GPU detection variables
+  set_fact:
+    nvidia_gpu_detected: false
+    amd_gpu_detected: false
+    detected_gpu_type: "cpu"
+
+- name: Check for NVIDIA GPU
+  include_tasks: nvidia.yml
+
+- name: Check for AMD GPU (if NVIDIA not found)
+  include_tasks: amd.yml
+  when: not nvidia_gpu_detected
+
+- name: Set CPU fallback (if no GPU detected)
+  include_tasks: fallback.yml
+  when:
+    - not nvidia_gpu_detected
+    - not amd_gpu_detected
+
+- name: Display GPU detection results
+  debug:
+    msg:
+      - "GPU Detection Complete"
+      - "NVIDIA GPU: {{ nvidia_gpu_detected }}"
+      - "AMD GPU: {{ amd_gpu_detected }}"
+      - "Selected GPU Type: {{ detected_gpu_type }}"

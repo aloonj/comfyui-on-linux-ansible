@@ -1,0 +1,5 @@
+---
+# Main Python installation orchestrator
+
+- name: Include OS-specific Python installation
+  include_tasks: "{{ ansible_os_family }}.yml"

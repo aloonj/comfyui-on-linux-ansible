@@ -1,0 +1,38 @@
+---
+# Default variables for ComfyUI role
+# These can be overridden in group_vars/all.yml or via extra-vars
+
+comfyui_install_method: cli
+comfyui_install_dir: /opt/comfyui
+comfyui_venv_dir: "{{ comfyui_install_dir }}/venv"
+
+comfyui_create_user: true
+comfyui_user: comfyui
+comfyui_group: comfyui
+comfyui_user_home: "{{ comfyui_install_dir }}"
+comfyui_user_shell: /bin/bash
+
+comfyui_python_version: "3"
+comfyui_python_min_version: "3.9"
+
+comfyui_gpu_type: auto
+
+pytorch_cuda_version: cu124
+pytorch_rocm_version: rocm6.0
+
+comfyui_bind_address: 127.0.0.1
+comfyui_port: 8188
+
+comfyui_enable_service: true
+comfyui_service_name: comfyui
+
+comfyui_launch_args:
+  - "--listen {{ comfyui_bind_address }}"
+  - "--port {{ comfyui_port }}"
+
+comfyui_extra_launch_args: []
+
+comfyui_install_manager: true
+
+comfyui_git_repo: https://github.com/comfyanonymous/ComfyUI.git
+comfyui_git_version: master

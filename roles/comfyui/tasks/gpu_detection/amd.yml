@@ -1,0 +1,27 @@
+---
+# AMD GPU detection
+
+- name: Check for rocm-smi
+  command: which rocm-smi
+  register: rocm_smi_check
+  changed_when: false
+  failed_when: false
+
+- name: Check for AMD GPU via lspci
+  shell: lspci | grep -i 'VGA.*AMD\|VGA.*ATI'
+  register: amd_gpu_lspci
+  changed_when: false
+  failed_when: false
+
+- name: Set AMD GPU detected flag
+  set_fact:
+    amd_gpu_detected: true
+    detected_gpu_type: "rocm"
+  when: rocm_smi_check.rc == 0 or amd_gpu_lspci.rc == 0
+
+- name: Display AMD GPU information
+  debug:
+    msg:
+      - "AMD GPU Detected"
+      - "{{ amd_gpu_lspci.stdout_lines | default(['ROCm tools found']) }}"
+  when: amd_gpu_detected

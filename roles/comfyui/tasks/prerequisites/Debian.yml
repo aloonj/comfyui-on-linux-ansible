@@ -1,0 +1,27 @@
+---
+# Debian/Ubuntu prerequisites installation
+
+- name: Update apt cache
+  apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install Git
+  apt:
+    name: "{{ git_package }}"
+    state: present
+
+- name: Install build essentials and dependencies
+  apt:
+    name: "{{ build_packages }}"
+    state: present
+
+- name: Install additional required packages
+  apt:
+    name:
+      - software-properties-common
+      - apt-transport-https
+      - ca-certificates
+      - gnupg
+      - lsb-release
+    state: present

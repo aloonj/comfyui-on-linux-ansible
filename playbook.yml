@@ -1,0 +1,36 @@
+---
+- name: Install ComfyUI on Linux
+  hosts: all
+  become: true
+
+  pre_tasks:
+    - name: Display installation configuration
+      debug:
+        msg:
+          - "ComfyUI Installation Starting"
+          - "Target Host: {{ inventory_hostname }}"
+          - "OS Family: {{ ansible_os_family }}"
+          - "Install Method: {{ comfyui_install_method }}"
+          - "GPU Type: {{ comfyui_gpu_type }}"
+          - "Install Directory: {{ comfyui_install_dir }}"
+          - "Service Enabled: {{ comfyui_enable_service }}"
+
+  roles:
+    - role: comfyui
+      tags: ['comfyui']
+
+  post_tasks:
+    - name: Display installation summary
+      debug:
+        msg:
+          - "ComfyUI Installation Complete!"
+          - "Installation Directory: {{ comfyui_install_dir }}"
+          - "Virtual Environment: {{ comfyui_venv_dir }}"
+          - "Service Status: {{ 'Enabled' if comfyui_enable_service else 'Disabled' }}"
+          - "Access URL: http://{{ comfyui_bind_address }}:{{ comfyui_port }}"
+          - ""
+          - "To start ComfyUI manually:"
+          - "  sudo systemctl start comfyui"
+          - ""
+          - "To activate virtualenv:"
+          - "  source {{ comfyui_venv_dir }}/bin/activate"

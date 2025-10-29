@@ -1,0 +1,10 @@
+---
+# Service configuration orchestrator
+
+- name: Configure ComfyUI systemd service
+  include_tasks: systemd.yml
+  tags: ['always']
+
+- name: Configure launch settings
+  include_tasks: configure.yml
+  tags: ['always']

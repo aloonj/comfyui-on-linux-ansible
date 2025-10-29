@@ -1,0 +1,32 @@
+---
+# Debian/Ubuntu Python installation
+
+- name: Check if required Python version is available in default repositories
+  command: apt-cache policy python{{ comfyui_python_version }}
+  register: python_available
+  changed_when: false
+  failed_when: false
+
+- name: Add deadsnakes PPA if Python version not available
+  apt_repository:
+    repo: "{{ python_ppa_repo }}"
+    state: present
+    update_cache: true
+  when: python_available.rc != 0
+
+- name: Install Python packages
+  apt:
+    name: "{{ python_packages }}"
+    state: present
+
+- name: Install specific Python version if requested
+  apt:
+    name:
+      - "python{{ comfyui_python_version }}"
+      - "python{{ comfyui_python_version }}-venv"
+      - "python{{ comfyui_python_version }}-dev"
+    state: present
+  when: comfyui_python_version != "3"
+
+# Skip upgrading system pip due to PEP 668
+# Pip will be upgraded inside the virtual environment instead

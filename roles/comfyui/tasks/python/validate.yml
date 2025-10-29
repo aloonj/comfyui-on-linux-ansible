@@ -1,0 +1,38 @@
+---
+# Validate Python installation and version
+
+- name: Get Python version
+  command: python3 --version
+  register: python_version_output
+  changed_when: false
+
+- name: Parse Python version
+  set_fact:
+    installed_python_version: "{{ python_version_output.stdout | regex_search('\\d+\\.\\d+') }}"
+
+- name: Display installed Python version
+  debug:
+    msg: "Installed Python version: {{ installed_python_version }}"
+
+- name: Validate Python version meets minimum requirement
+  assert:
+    that:
+      - installed_python_version is version(comfyui_python_min_version, '>=')
+    fail_msg: >
+      Python version {{ installed_python_version }} is below minimum required version {{ comfyui_python_min_version }}
+    success_msg: "Python version {{ installed_python_version }} meets requirements"
+
+- name: Verify pip installation
+  command: pip3 --version
+  register: pip_version_output
+  changed_when: false
+
+- name: Display pip version
+  debug:
+    msg: "{{ pip_version_output.stdout }}"
+
+- name: Verify venv module is available
+  command: python3 -m venv --help
+  register: venv_check
+  changed_when: false
+  failed_when: venv_check.rc != 0

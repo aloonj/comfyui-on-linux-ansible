@@ -1,0 +1,46 @@
+---
+# CUDA-enabled PyTorch installation
+
+- name: Create virtual environment for ComfyUI
+  command: python3 -m venv {{ comfyui_venv_dir }}
+  args:
+    creates: "{{ comfyui_venv_dir }}/bin/activate"
+  become: true
+  become_user: "{{ comfyui_user }}"
+
+- name: Upgrade pip in virtual environment
+  pip:
+    name:
+      - pip
+      - setuptools
+      - wheel
+    state: latest
+    virtualenv: "{{ comfyui_venv_dir }}"
+  become: true
+  become_user: "{{ comfyui_user }}"
+
+- name: Install PyTorch with CUDA support
+  pip:
+    name:
+      - torch
+      - torchvision
+      - torchaudio
+    extra_args: "--index-url https://download.pytorch.org/whl/{{ pytorch_cuda_version }}"
+    virtualenv: "{{ comfyui_venv_dir }}"
+  become: true
+  become_user: "{{ comfyui_user }}"
+
+- name: Verify CUDA is available in PyTorch
+  shell: |
+    source {{ comfyui_venv_dir }}/bin/activate
+    python -c "import torch; print(f'CUDA Available: {torch.cuda.is_available()}'); print(f'CUDA Version: {torch.version.cuda if torch.cuda.is_available() else \"N/A\"}')"
+  args:
+    executable: /bin/bash
+  register: cuda_check
+  changed_when: false
+  become: true
+  become_user: "{{ comfyui_user }}"
+
+- name: Display CUDA verification
+  debug:
+    msg: "{{ cuda_check.stdout_lines }}"

@@ -1,0 +1,21 @@
+---
+# RedHat/CentOS/Fedora/Rocky/Alma specific variables
+
+python_packages:
+  - python3
+  - python3-pip
+  - python3-devel
+
+git_package: git
+
+build_packages:
+  - "@development-tools"
+  - wget
+  - curl
+
+# EPEL repo for additional packages
+epel_repo_required: true
+epel_repo_url: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+
+# Package manager command
+package_manager: dnf

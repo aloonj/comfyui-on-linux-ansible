@@ -1,0 +1,9 @@
+---
+# ComfyUI installation orchestrator
+
+- name: Display ComfyUI installation method
+  debug:
+    msg: "Installing ComfyUI using {{ comfyui_install_method }} method"
+
+- name: Include installation method specific tasks
+  include_tasks: "{{ comfyui_install_method }}_install.yml"

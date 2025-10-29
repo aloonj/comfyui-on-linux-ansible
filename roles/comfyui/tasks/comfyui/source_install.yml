@@ -1,0 +1,55 @@
+---
+# ComfyUI installation from source
+
+- name: Check if ComfyUI repository already exists
+  stat:
+    path: "{{ comfyui_install_dir }}/ComfyUI"
+  register: comfyui_repo
+
+- name: Clone ComfyUI repository
+  git:
+    repo: "{{ comfyui_git_repo }}"
+    dest: "{{ comfyui_install_dir }}/ComfyUI"
+    version: "{{ comfyui_git_version }}"
+    force: false
+  become: true
+  become_user: "{{ comfyui_user }}"
+  when: not comfyui_repo.stat.exists
+
+- name: Update ComfyUI repository if it exists
+  git:
+    repo: "{{ comfyui_git_repo }}"
+    dest: "{{ comfyui_install_dir }}/ComfyUI"
+    version: "{{ comfyui_git_version }}"
+    update: true
+  become: true
+  become_user: "{{ comfyui_user }}"
+  when: comfyui_repo.stat.exists
+
+- name: Set ComfyUI directory path
+  set_fact:
+    comfyui_app_dir: "{{ comfyui_install_dir }}/ComfyUI"
+
+- name: Install ComfyUI requirements
+  pip:
+    requirements: "{{ comfyui_app_dir }}/requirements.txt"
+    virtualenv: "{{ comfyui_venv_dir }}"
+  become: true
+  become_user: "{{ comfyui_user }}"
+
+- name: Clone ComfyUI-Manager if enabled
+  git:
+    repo: https://github.com/ltdrdata/ComfyUI-Manager.git
+    dest: "{{ comfyui_app_dir }}/custom_nodes/ComfyUI-Manager"
+    version: main
+  become: true
+  become_user: "{{ comfyui_user }}"
+  when: comfyui_install_manager | bool
+
+- name: Ensure correct permissions on ComfyUI directory
+  file:
+    path: "{{ comfyui_app_dir }}"
+    state: directory
+    owner: "{{ comfyui_user }}"
+    group: "{{ comfyui_group }}"
+    recurse: true

@@ -1,0 +1,31 @@
+# ComfyUI Environment Variables
+# This file is sourced by the systemd service
+
+# Python environment
+VIRTUAL_ENV={{ comfyui_venv_dir }}
+PATH={{ comfyui_venv_dir }}/bin:$PATH
+
+# ComfyUI settings
+COMFYUI_DIR={{ comfyui_app_dir }}
+
+# GPU settings
+{% if detected_gpu_type == 'cuda' %}
+# NVIDIA CUDA settings
+CUDA_VISIBLE_DEVICES=0
+NVIDIA_VISIBLE_DEVICES=all
+NVIDIA_DRIVER_CAPABILITIES=compute,utility
+{% elif detected_gpu_type == 'rocm' %}
+# AMD ROCm settings
+ROC_ENABLE_PRE_VEGA=1
+HSA_OVERRIDE_GFX_VERSION=10.3.0
+{% elif detected_gpu_type == 'cpu' %}
+# CPU-only mode
+CUDA_VISIBLE_DEVICES=-1
+{% endif %}
+
+# PyTorch settings
+OMP_NUM_THREADS=4
+PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+
+# Logging
+COMFYUI_LOG_LEVEL=INFO

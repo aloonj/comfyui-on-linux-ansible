@@ -1,0 +1,19 @@
+---
+# RedHat/CentOS/Fedora Python installation
+
+- name: Install Python packages
+  dnf:
+    name: "{{ python_packages }}"
+    state: present
+
+- name: Install specific Python version if available
+  dnf:
+    name:
+      - "python{{ comfyui_python_version }}"
+      - "python{{ comfyui_python_version }}-devel"
+    state: present
+  when: comfyui_python_version != "3"
+  failed_when: false
+
+# Skip upgrading system pip due to PEP 668
+# Pip will be upgraded inside the virtual environment instead

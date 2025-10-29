@@ -1,0 +1,34 @@
+---
+# Additional service configuration
+
+- name: Create log directory
+  file:
+    path: "/var/log/comfyui"
+    state: directory
+    owner: "{{ comfyui_user }}"
+    group: "{{ comfyui_group }}"
+    mode: '0755'
+
+- name: Create output directory for generated files
+  file:
+    path: "{{ comfyui_app_dir }}/output"
+    state: directory
+    owner: "{{ comfyui_user }}"
+    group: "{{ comfyui_group }}"
+    mode: '0755'
+
+- name: Create temp directory
+  file:
+    path: "{{ comfyui_app_dir }}/temp"
+    state: directory
+    owner: "{{ comfyui_user }}"
+    group: "{{ comfyui_group }}"
+    mode: '0755'
+
+- name: Create input directory for user uploads
+  file:
+    path: "{{ comfyui_app_dir }}/input"
+    state: directory
+    owner: "{{ comfyui_user }}"
+    group: "{{ comfyui_group }}"
+    mode: '0755'

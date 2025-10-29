@@ -1,0 +1,20 @@
+---
+# Create ComfyUI user and group
+
+- name: Create ComfyUI group
+  group:
+    name: "{{ comfyui_group }}"
+    state: present
+    system: true
+
+- name: Create ComfyUI user
+  user:
+    name: "{{ comfyui_user }}"
+    group: "{{ comfyui_group }}"
+    groups: "video,render"
+    append: true
+    home: "{{ comfyui_user_home }}"
+    shell: "{{ comfyui_user_shell }}"
+    system: true
+    create_home: true
+    comment: "ComfyUI Service Account"

@@ -1,0 +1,5 @@
+---
+# Main prerequisites orchestrator - routes to OS-specific tasks
+
+- name: Include OS-specific prerequisites
+  include_tasks: "{{ ansible_os_family }}.yml"

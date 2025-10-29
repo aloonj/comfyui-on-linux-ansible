@@ -1,0 +1,32 @@
+---
+# RedHat/CentOS/Fedora/Rocky/Alma prerequisites installation
+
+- name: Install EPEL repository
+  dnf:
+    name: "{{ epel_repo_url }}"
+    state: present
+    disable_gpg_check: true
+  when:
+    - epel_repo_required | bool
+    - ansible_distribution in ['RedHat', 'CentOS', 'Rocky', 'AlmaLinux']
+
+- name: Update dnf cache
+  dnf:
+    update_cache: true
+
+- name: Install Git
+  dnf:
+    name: "{{ git_package }}"
+    state: present
+
+- name: Install build tools and dependencies
+  dnf:
+    name: "{{ build_packages }}"
+    state: present
+
+- name: Install additional required packages
+  dnf:
+    name:
+      - ca-certificates
+      - gnupg2
+    state: present

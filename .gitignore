@@ -1,0 +1,39 @@
+# Ansible
+*.retry
+.ansible/
+/tmp/
+
+# Ansible facts cache
+/tmp/ansible_facts/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Claude Code
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local customization files (if you want to keep secrets out of git)
+group_vars/secrets.yml
+host_vars/*/secrets.yml
+*.secret.yml

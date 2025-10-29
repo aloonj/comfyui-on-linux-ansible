@@ -1,0 +1,9 @@
+---
+# PyTorch installation orchestrator
+
+- name: Display PyTorch installation plan
+  debug:
+    msg: "Installing PyTorch with {{ detected_gpu_type }} support"
+
+- name: Include GPU-specific PyTorch installation
+  include_tasks: "{{ detected_gpu_type }}.yml"

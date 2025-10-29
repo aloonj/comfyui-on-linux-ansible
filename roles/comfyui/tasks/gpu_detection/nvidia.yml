@@ -1,0 +1,29 @@
+---
+# NVIDIA GPU detection
+
+- name: Check for nvidia-smi
+  command: which nvidia-smi
+  register: nvidia_smi_check
+  changed_when: false
+  failed_when: false
+
+- name: Get NVIDIA GPU information if available
+  command: nvidia-smi --query-gpu=name --format=csv,noheader
+  register: nvidia_gpu_info
+  changed_when: false
+  failed_when: false
+  when: nvidia_smi_check.rc == 0
+
+- name: Set NVIDIA GPU detected flag
+  set_fact:
+    nvidia_gpu_detected: true
+    detected_gpu_type: "cuda"
+  when: nvidia_smi_check.rc == 0
+
+- name: Display NVIDIA GPU information
+  debug:
+    msg:
+      - "NVIDIA GPU Detected: {{ nvidia_gpu_info.stdout_lines }}"
+  when:
+    - nvidia_gpu_detected
+    - nvidia_gpu_info.stdout_lines is defined
